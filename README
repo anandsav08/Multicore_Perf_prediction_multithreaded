@@ -1,0 +1,72 @@
+# STEPS to follow:-
+##############################
+==> We have already collected the data by below procedures. So, we can directly jump to running algorithms from STEP 3 (d).
+==> We have provided the cleaned data set in the submission named 'clean.csv'. This is the final data set that we run machine learning algorithms upon.
+##############################
+==> Detailed steps to generate the data are as follows:-
+##############################
+1. Installing PARSEC
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+a. Download PARSEC tar file from below command :-
+    [-- wget http://parsec.cs.princeton.edu/download/3.0/parsec-3.0-core.tar.gz --]
+
+b. Extract using command:-
+    [-- tar -xzf parsec-3.0-core.tar.gz --]
+
+c. It will create a directory name 'parsec-3.0'. This contains the core PARSEC files. We still need to download the input sets separately.
+
+d. In the same folder where we extracted the tar file in step 1, we download and extract the below input tar file.
+    [-- wget http://parsec.cs.princeton.edu/download/3.0/parsec-3.0-input-sim.tar.gz --]
+
+e. After installing the core files, we need to setup the env variables temporarily to give PARSEC access to everything it needs. 
+For this, we go to the extracted directory from step (a), named 'parsec-3.0' and run the command 'source env.sh'
+
+2. DATA COLLECTION
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+a. Run the script 'datagen.py' 
+    [-- python3 datagen.py --]
+    This runs the workloads from PARSEC3.0 benchmark suite (also contains SPLASH2x)
+
+b. It will create a csv file named 'data.csv' containing the data collected for applications of PARSEC3.0 and SPLASH2x
+
+c. To collect data from CRONO benchmark follow below steps:-
+    - Clone the git repo https://github.com/masabahmad/CRONO.git
+    - Inside the cloned directory, run the "make" command
+    - In the datagen_CRONO.py script, make the CRONO_PATH variable point to the CRONO folder (cloned from github repo) like below:-
+        CRONO_PATH = "/home/ak8288/multicore/final_project/crono/CRONO"
+    - Run datagen_CRONO.py 
+    - data_CRONO.csv is created.
+    - Run clean_CRONO.py with python3 to generate clean_CRONO.csv
+    
+
+3. RUNNING ALGORITHMS
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+a. First step is to install all the required Python libraries that we will be needing throught the experiments. For that run below command:
+    [-- pip3 install -r requirements.txt --]
+
+b. Then we do the data clean up by running clean.py
+    [-- python3 clean.py --]
+    It generates a clean data set clean.csv by dropping un-necessary columns/features from the data set.
+    * NOTE: It is very important to note that we need to run the datagen.py command completely before running this command or else important features will get dropped later which we need <hardcoded>
+
+c. Next, we find the top 14 best features by running below command:-
+    [-- python3 selectKbest.py --]
+    This gives us the top 14 features for our data set. We pick this list as our references for the machine learning algorithms.
+
+d. Multiple Linear Regression :-
+    [-- python3 multipleLinearRegression.py --]
+
+e. Support Vector Regression :-
+    [-- python3 svr.py --]
+
+f. XGBoost :-
+    [-- python3 xgb.py --]
+
+g. Ridge Regression :-
+    [-- python3 ridge.py --]
+
+h. Lasso Regression :-
+    [-- python3 lasso.py --]
